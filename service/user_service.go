@@ -2,25 +2,24 @@ package service
 
 import (
 	"database/sql"
-	"errors"
 
+	"github.com/Siravitt/go-hexagonal/errs"
 	"github.com/Siravitt/go-hexagonal/logs"
-	"github.com/Siravitt/go-hexagonal/repository"
 )
 
-type userService struct {
-	userRepo repository.UserRepository
-}
+// type userService struct {
+// 	userRepo repository.UserRepository
+// }
 
-func NewUserService(userRepo repository.UserRepository) userService {
-	return userService{userRepo: userRepo}
-}
+// func NewUserService(userRepo repository.UserRepository) userService {
+// 	return userService{userRepo: userRepo}
+// }
 
-func (s userService) GetAllUser() ([]UserResponse, error) {
-	users, err := s.userRepo.GetAll()
+func (s service) GetAllUser() ([]UserResponse, error) {
+	users, err := s.repo.GetAllUser()
 	if err != nil {
 		logs.Error(err)
-		return nil, err
+		return nil, errs.NewUnexpectedError()
 	}
 	userResponses := []UserResponse{}
 	for _, user := range users {
@@ -32,14 +31,14 @@ func (s userService) GetAllUser() ([]UserResponse, error) {
 	return userResponses, nil
 }
 
-func (s userService) GetUser(id int) (*UserResponse, error) {
-	user, err := s.userRepo.GetById(id)
+func (s service) GetUser(id int) (*UserResponse, error) {
+	user, err := s.repo.GetById(id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.New("User not found")
+			return nil, errs.NewNotFoundError("user not found")
 		}
 		logs.Error(err)
-		return nil, err
+		return nil, errs.NewUnexpectedError()
 	}
 	userResponse := UserResponse{
 		Name: user.Name,

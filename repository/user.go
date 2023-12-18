@@ -7,7 +7,6 @@ type User struct {
 	Name string `db:"name"`
 }
 
-type UserRepository interface {
-	GetAll() ([]User, error)
-	GetById(int) (*User, error)
+type userRepositoryMock struct {
+	users []User
 }

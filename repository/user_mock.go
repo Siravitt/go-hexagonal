@@ -1,21 +1,15 @@
 package repository
 
-import "errors"
+import (
+	"errors"
+)
 
-type userRepositoryMock struct {
-	users []User
-}
-
-func NewUserRepositoryMock() userRepositoryMock {
+func (r userRepositoryMock) GetAllUser() ([]User, error) {
 	users := []User{
 		{Id: 1, Name: "Siravit"},
 		{Id: 2, Name: "Tanratvijit"},
 	}
-	return userRepositoryMock{users: users}
-}
-
-func (r userRepositoryMock) GetAll() ([]User, error) {
-	return r.users, nil
+	return users, nil
 }
 
 func (r userRepositoryMock) GetById(id int) (*User, error) {

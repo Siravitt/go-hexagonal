@@ -21,22 +21,17 @@ func main() {
 	db := initDatabase()
 
 	// Create Repository
-	userRepositoryDB := repository.NewUserRepositoryDB(db)
-	userRepositoryMock := repository.NewUserRepositoryMock()
+	repository := repository.NewRepository(db)
+	// repository := repository.NewUserRepositoryMock(db)
 
 	// Create Service
-	userServiceDB := service.NewUserService(userRepositoryDB)
-	userServiceMock := service.NewUserService(userRepositoryMock)
+	service := service.NewService(repository)
 
 	// Create Handler
-	userHandlerDB := handler.NewUserHandler(userServiceDB)
-	userHandlerMock := handler.NewUserHandler(userServiceMock)
-	_ = userHandlerMock
+	handler := handler.NewHandler(service)
 
 	// Create Router
-	router.InitRouter(userHandlerDB)
-	// router.InitRouter(userHandlerMock)
-
+	router.InitRouter(handler)
 }
 
 func initConfig() {
