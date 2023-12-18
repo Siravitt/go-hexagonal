@@ -31,10 +31,12 @@ func main() {
 	// Create Handler
 	userHandlerDB := handler.NewUserHandler(userServiceDB)
 	userHandlerMock := handler.NewUserHandler(userServiceMock)
+	_ = userHandlerMock
 
 	// Create Router
 	router.InitRouter(userHandlerDB)
-	router.InitRouter(userHandlerMock)
+	// router.InitRouter(userHandlerMock)
+
 }
 
 func initConfig() {

@@ -1,10 +1,13 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Siravitt/go-hexagonal/handler"
+	"github.com/Siravitt/go-hexagonal/logs"
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 )
 
 func InitRouter(userHdr handler.UserHandler) {
@@ -15,5 +18,7 @@ func InitRouter(userHdr handler.UserHandler) {
 
 	router.HandleFunc("/usersMock", userHdr.GetUsers).Methods(http.MethodGet)
 	router.HandleFunc("/userMock/{userId:[0-9]+}", userHdr.GetUser).Methods(http.MethodGet)
-	// router.HandleFunc("")
+
+	logs.Info("User service started at port " + viper.GetString("app.port"))
+	http.ListenAndServe(fmt.Sprintf(":%v", viper.GetInt("app.port")), router)
 }
