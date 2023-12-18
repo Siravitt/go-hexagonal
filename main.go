@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/Siravitt/go-hexagonal/handler"
+	"github.com/Siravitt/go-hexagonal/logs"
 	"github.com/Siravitt/go-hexagonal/repository"
 	"github.com/Siravitt/go-hexagonal/service"
 	_ "github.com/go-sql-driver/mysql"
@@ -39,7 +39,8 @@ func main() {
 	router.HandleFunc("/usersMock", userHandlerMock.GetUsers).Methods(http.MethodGet)
 	router.HandleFunc("/userMock/{userId:[0-9]+}", userHandlerMock.GetUser).Methods(http.MethodGet)
 
-	log.Printf("User service started at port %v", viper.GetInt("app.port"))
+	// log.Printf("User service started at port %v", viper.GetInt("app.port"))
+	logs.Info("User service started at port " + viper.GetString("app.port"))
 	http.ListenAndServe(fmt.Sprintf(":%v", viper.GetInt("app.port")), router)
 }
 

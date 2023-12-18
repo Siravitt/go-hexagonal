@@ -3,8 +3,8 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"log"
 
+	"github.com/Siravitt/go-hexagonal/logs"
 	"github.com/Siravitt/go-hexagonal/repository"
 )
 
@@ -19,7 +19,7 @@ func NewUserService(userRepo repository.UserRepository) userService {
 func (s userService) GetAllUser() ([]UserResponse, error) {
 	users, err := s.userRepo.GetAll()
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 		return nil, err
 	}
 	userResponses := []UserResponse{}
@@ -38,7 +38,7 @@ func (s userService) GetUser(id int) (*UserResponse, error) {
 		if err == sql.ErrNoRows {
 			return nil, errors.New("User not found")
 		}
-		log.Println(err)
+		logs.Error(err)
 		return nil, err
 	}
 	userResponse := UserResponse{
